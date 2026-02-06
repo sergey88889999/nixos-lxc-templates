@@ -15,15 +15,18 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
-
+      # https://github.com/actions/checkout/releases
+      uses: actions/checkout@v6
+    
     - name: Install Nix
-      uses: cachix/install-nix-action@v26
+      # Source: https://github.com/cachix/install-nix-action/releases
+      uses: cachix/install-nix-action@v31
       with:
         nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-25.11.tar.gz
-
-    - name: Setup Cachix (опционально - для ускорения)
-      uses: cachix/cachix-action@v14
+        
+    - name: Setup Cachix
+      # Source: https://github.com/cachix/cachix-action/releases
+      uses: cachix/cachix-action@v16
       with:
         name: nix-community
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -52,19 +55,29 @@ jobs:
         ls -lh nixos-lxc-proxmox.tar.xz
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v4
+    # https://github.com/actions/upload-artifact/releases
+      uses: actions/upload-artifact@v6
       with:
         name: nixos-lxc-tarball
         path: nixos-lxc-proxmox.tar.xz
         retention-days: 90
         compression-level: 0
 
-    # Create GitHub Release on tag push
+    - name: Generate checksums
+      run: |
+        sha256sum nixos-lxc-proxmox.tar.xz > nixos-lxc-proxmox.tar.xz.sha256
+        echo "Checksum:"
+        cat nixos-lxc-proxmox.tar.xz.sha256
+
+     # Create GitHub Release on tag push
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
+      # https://github.com/softprops/action-gh-release/releases
+      uses: softprops/action-gh-release@v2.5.0
       with:
-        files: nixos-lxc-proxmox.tar.xz
+        files: |
+          nixos-lxc-proxmox.tar.xz
+          nixos-lxc-proxmox.tar.xz.sha256
         body: |
           ## NixOS LXC Container Template for Proxmox
           
@@ -79,6 +92,6 @@ jobs:
           - Timezone: Europe/Berlin
           - SSH: Key-based auth only
           - Network: Managed by Proxmox
-          
+                   
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

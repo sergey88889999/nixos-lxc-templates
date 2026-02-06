@@ -1,6 +1,7 @@
 # NixOS LXC Templates for Proxmox
 
-[![Build Status](https://github.com/USERNAME/nixos-lxc-templates/actions/workflows/build.yml/badge.svg)](https://github.com/USERNAME/nixos-lxc-templates/actions/workflows/build.yml)
+[![Build](https://github.com/sergey88889999/nixos-lxc-templates/actions/workflows/build.yml/badge.svg)](https://github.com/sergey88889999/nixos-lxc-templates/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/sergey88889999/nixos-lxc-templates)](https://github.com/sergey88889999/nixos-lxc-templates/releases)
 
 Automated NixOS container images for Proxmox LXC with Infrastructure as Code approach.
 
