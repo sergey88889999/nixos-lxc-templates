@@ -1,0 +1,7 @@
+# Nix artifacts
+result*
+*.tar.xz
+
+# Temporary files
+*~
+.*.swp
