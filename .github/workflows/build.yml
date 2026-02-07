@@ -2,8 +2,9 @@ name: Build NixOS LXC Tarball
 
 on:
   push:
-    tags: [ 'v*' ]
-  workflow_dispatch:  # Manual trigger from web UI
+    branches: [ 'main' ]  # Trigger on every push to the main branch
+    tags: [ 'v*' ]        # Trigger on version tags (e.g., v0.1, v1.0)
+  workflow_dispatch:      # Manual trigger from web UI
 
 # Required permissions for creating releases
 permissions:

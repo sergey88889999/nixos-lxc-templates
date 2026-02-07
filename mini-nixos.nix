@@ -11,12 +11,34 @@
   imports = [
     "${modulesPath}/virtualisation/lxc-container.nix"
   ];
-
-  services.resolved.enable = false;
-
+  
+  # DISABLE NixOS network management
   networking = {
     hostName = "nixos-lxc";
+    
+    # Critically important!
+    useDHCP = lib.mkForce false;
+    useNetworkd = lib.mkForce true;
+    interfaces = lib.mkForce {};  # Empty interface set
+    dhcpcd.enable = lib.mkForce false;
   };
+
+  # Enable systemd-networkd WITHOUT configuration
+  systemd.network = {
+    enable = true;
+    networks = {};  # Empty! Proxmox will populate this
+  };
+
+  # Make /etc/systemd/network writable for Proxmox
+  system.activationScripts.lxc-network = lib.stringAfter [ "etc" ] ''
+    # Удаляем симлинк созданный NixOS
+    rm -rf /etc/systemd/network
+    # Создаём обычную директорию
+    mkdir -p /etc/systemd/network
+    chmod 755 /etc/systemd/network
+  '';
+
+  services.resolved.enable = false;
 
   services.openssh = {
     enable = true;
