@@ -7,7 +7,7 @@
 # - Time zone configuration Europe/Berlin
 #==============================================================
 
-{ pkgs, modulesPath, ... }: {
+{ pkgs, modulesPath,lib,... }: {
   imports = [
     "${modulesPath}/virtualisation/lxc-container.nix"
   ];
